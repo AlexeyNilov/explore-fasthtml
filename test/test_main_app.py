@@ -11,4 +11,4 @@ def client():
 
 def test_title(client):
     r = client.get("/")
-    assert '<title>Main app</title>' in r.text
+    assert "<title>Main app</title>" in r.text
