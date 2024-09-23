@@ -11,3 +11,4 @@ https://picocss.com/
 https://h2x.answer.ai/
 http://flexboxgrid.com/
 https://hypermedia.systems/book/contents/
+https://github.com/AnswerDotAI/fasthtml/blob/main/examples/adv_app.py

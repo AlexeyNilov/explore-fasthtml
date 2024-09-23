@@ -13,23 +13,33 @@ from data.logger import set_logging
 
 
 set_logging()
+
 gridlink = fh.Link(
     rel="stylesheet",
     href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
     type="text/css",
 )
 htmx_ws = fh.Script(src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js")
-app = fh.FastHTML(hdrs=(fh.picolink, gridlink, htmx_ws), debug=True)
+css = fh.Style(
+    """
+    .row { border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }
+    .box { border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }
+    .col-xs-4 { border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }
+"""
+)
+
+app = fh.FastHTML(hdrs=(fh.picolink, gridlink, htmx_ws, css), debug=True)
 
 
+name = "Sim 1.1"
 is_started = False
 button = "Start"
 
 
 def sim():
     data = (
-        fh.Div(*RESOURCES, cls="row col-xs", id="resources"),
-        fh.Div(oak, cls="row col-xs", id="oak"),
+        fh.Div(*RESOURCES, cls="col-xs-2", id="resources"),
+        fh.Div(oak, cls="col-xs-2", id="oak"),
     )
     return data
 
@@ -39,19 +49,30 @@ def home(session):
     if "session_id" not in session:
         session["session_id"] = str(uuid.uuid4())
 
-    return (
-        fh.Title("Simulation"),
-        fh.Main(
-            fh.H1("Sim demo", id="title"),
+    header = fh.Div(
+        fh.Div(
+            fh.H1(name, id="title"),
+            cls="col-xs-4",
+        ),
+        fh.Div(
             fh.Button(
                 f"{button}",
                 hx_put="/start",
                 hx_target="#gen-list",
                 hx_swap="none",
-                style="margin: 8px;",
+                style="margin: 4px;",
                 id="button",
             ),
-            fh.Div(sim(), id="gen-list"),
+            cls="col-xs-2",
+        ),
+        cls="row",
+    )
+
+    return (
+        fh.Title("Simulation"),
+        fh.Main(
+            header,
+            fh.Div(sim(), id="gen-list", cls="row"),
             cls="container",
             hx_ext="ws",
             ws_connect="/main",
@@ -111,7 +132,7 @@ simulation_coroutine = asyncio.create_task(simulation())
 
 
 def get_title():
-    return f"Sim demo status: {is_started}"
+    return f"{name} status: {is_started}"
 
 
 def switch_button():

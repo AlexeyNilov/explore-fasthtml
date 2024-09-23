@@ -13,7 +13,6 @@ class ResourceFT(Resource):
         return fh.Div(
             f"{self.id}",
             fh.Ul(fh.Li("Name: ", self.name), fh.Li("Value: ", self.value)),
-            style="border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px;",
             cls="box",
         )
 

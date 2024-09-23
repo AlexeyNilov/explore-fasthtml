@@ -12,7 +12,6 @@ class CreatureFT(Creature):
                 fh.Li("Is alive: ", self.is_alive),
                 fh.Li("Health: ", self.hp),
             ),
-            style="border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px;",
             cls="box",
         )
 
