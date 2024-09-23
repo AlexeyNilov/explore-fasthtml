@@ -28,14 +28,6 @@ button = "Start"
 
 def sim():
     data = (
-        fh.Button(
-            f"{button}",
-            hx_put="/start",
-            hx_target="#gen-list",
-            hx_swap="none",
-            style="margin: 8px;",
-            id="button",
-        ),
         fh.Div(*RESOURCES, cls="row col-xs-12", id="resources"),
         fh.Div(oak, cls="row col-xs-12", id="oak"),
     )
@@ -47,15 +39,19 @@ def home(session):
     if "session_id" not in session:
         session["session_id"] = str(uuid.uuid4())
 
-    gen_list = fh.Div(
-        sim(),
-        id="gen-list",
-    )
     return (
         fh.Title("Simulation"),
         fh.Main(
             fh.H1("Sim demo", id="title"),
-            gen_list,
+            fh.Button(
+                f"{button}",
+                hx_put="/start",
+                hx_target="#gen-list",
+                hx_swap="none",
+                style="margin: 8px;",
+                id="button",
+            ),
+            fh.Div(sim(), id="gen-list"),
             cls="container",
             hx_ext="ws",
             ws_connect="/main",
@@ -131,9 +127,17 @@ async def start():
     global is_started
     is_started = not is_started
     switch_button()
+    b = fh.Button(
+        f"{button}",
+        hx_put="/start",
+        hx_target="#gen-list",
+        hx_swap="none",
+        style="margin: 8px;",
+        id="button",
+        hx_swap_oob="true",
+    )
     await update_players()
-
-    return fh.H1(get_title(), id="title", hx_swap_oob="true")
+    return fh.H1(get_title(), id="title", hx_swap_oob="true"), b
 
 
 fh.serve()
