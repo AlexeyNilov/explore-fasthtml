@@ -1,7 +1,7 @@
 import pytest
 from starlette.testclient import TestClient
 
-from main import app
+from sample.refresh import app
 
 
 @pytest.fixture
@@ -11,4 +11,4 @@ def client():
 
 def test_title(client):
     r = client.get("/")
-    assert "<title>Main app</title>" in r.text
+    assert "<title>Self refresh app</title>" in r.text
