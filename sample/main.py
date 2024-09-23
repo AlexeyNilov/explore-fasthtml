@@ -14,10 +14,9 @@ from data.logger import set_logging
 
 set_logging()
 
-gridlink = fh.Link(
+flex_grid = fh.Link(
     rel="stylesheet",
-    href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
-    type="text/css",
+    href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
 )
 htmx_ws = fh.Script(src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js")
 css = fh.Style(
@@ -28,7 +27,7 @@ css = fh.Style(
 """
 )
 
-app = fh.FastHTML(hdrs=(fh.picolink, gridlink, htmx_ws, css), debug=True)
+app = fh.FastHTML(hdrs=(fh.picolink, flex_grid, htmx_ws, css), debug=True)
 
 
 name = "Sim 1.1"
