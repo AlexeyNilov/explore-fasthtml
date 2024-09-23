@@ -14,7 +14,7 @@ class ResourceFT(Resource):
             f"{self.id}",
             fh.Ul(fh.Li("Name: ", self.name), fh.Li("Value: ", self.value)),
             style="border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px;",
-            cls="box col-xs-2",
+            cls="box",
         )
 
 

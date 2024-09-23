@@ -28,8 +28,8 @@ button = "Start"
 
 def sim():
     data = (
-        fh.Div(*RESOURCES, cls="row col-xs-12", id="resources"),
-        fh.Div(oak, cls="row col-xs-12", id="oak"),
+        fh.Div(*RESOURCES, cls="row col-xs", id="resources"),
+        fh.Div(oak, cls="row col-xs", id="oak"),
     )
     return data
 
