@@ -2,13 +2,7 @@ from fasthtml import common as fh
 from typing import List, Any
 import uuid
 import asyncio
-from service.resource import (
-    get_random_resource,
-    remove_empty_resource,
-    RESOURCES,
-    create_fruit,
-)
-from service.creature import oak
+from service.creature import CREATURES
 from data.logger import set_logging
 
 
@@ -16,7 +10,7 @@ set_logging()
 
 flex_grid = fh.Link(
     rel="stylesheet",
-    href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
 )
 htmx_ws = fh.Script(src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js")
 css = fh.Style(
@@ -37,8 +31,7 @@ button = "Start"
 
 def sim():
     data = (
-        fh.Div(*RESOURCES, cls="col-xs-2", id="resources"),
-        fh.Div(oak, cls="col-xs-2", id="oak"),
+        fh.Div(*CREATURES, cls="col-xs-2", id="oak"),
     )
     return data
 
@@ -110,24 +103,9 @@ async def background_task():
         await asyncio.sleep(1)
 
 
-async def simulation():
-    while True:
-        if is_started and oak.is_alive:
-
-            oak.hp -= 1  # Live sucks!
-
-            if RESOURCES:
-                oak.apply(skill=oak.skills["eat"], to=get_random_resource())
-                if oak.hp == oak.max_hp:
-                    oak.hp -= create_fruit()
-
-                remove_empty_resource()
-
-        await asyncio.sleep(0.3)
-
-
-background_task_coroutine = asyncio.create_task(background_task())
-simulation_coroutine = asyncio.create_task(simulation())
+@app.on_event("startup")
+async def start_background_tasks():
+    asyncio.create_task(background_task())
 
 
 def get_title():
@@ -157,7 +135,7 @@ async def start():
         hx_swap_oob="true",
     )
     await update_players()
-    return fh.H1(get_title(), id="title", hx_swap_oob="true"), b
+    return fh.H1(get_title(), id="title", hx_swap_oob="true"), b  # TODO use headers
 
 
 fh.serve()

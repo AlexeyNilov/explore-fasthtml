@@ -1,28 +1,28 @@
 from fasthtml import common as fh
 from dnd_engine.model.creature import Creature
-from dnd_engine.model.skill_tech import SkillRecord
+from fastcore.all import patch
+import fastlite as fl
+from sqlite_minutils.db import Database
+from dnd_engine.data.storage_fastlite import load_creatures
+import os
 
 
-class CreatureFT(Creature):
-    def __ft__(self):
-        return fh.Div(
-            f"{self.id}",
-            fh.Ul(
-                fh.Li("Name: ", self.name),
-                fh.Li("Is alive: ", self.is_alive),
-                fh.Li("Health: ", self.hp),
-            ),
-            cls="box",
-        )
+@patch
+def __ft__(self: Creature):
+    return fh.Div(
+        f"{self.id}",
+        fh.Ul(
+            fh.Li("Name: ", self.name),
+            fh.Li("Is alive: ", self.is_alive),
+            fh.Li("Health: ", self.hp),
+            fh.Li("Max health: ", self.max_hp),
+        ),
+        cls="box",
+    )
 
 
-oak_data = {
-    "name": "The first oak",
-    "hp": 400,
-    "max_hp": 500,
-    "skill_book": [SkillRecord(name="eat", skill_class="Consume")],
-    "compatible_with": ["water"],
-    "nature": "organic",
-}
+db_path = os.environ['DB_PATH']
+DB: Database = fl.database(db_path)
+CREATURES = load_creatures(DB)
 
-oak = CreatureFT(**oak_data)
+# print(CREATURES[0].__ft__())

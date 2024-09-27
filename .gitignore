@@ -9,3 +9,6 @@ cache
 conf/settings.py
 *.sqlite
 .sesskey
+db/*
+sample/db/*
+start.sh
