@@ -1,10 +1,7 @@
 from fasthtml import common as fh
 from dnd_engine.model.creature import Creature
 from fastcore.all import patch
-import fastlite as fl
-from sqlite_minutils.db import Database
 from dnd_engine.data.storage_fastlite import load_creatures
-import os
 
 
 @patch
@@ -21,8 +18,4 @@ def __ft__(self: Creature):
     )
 
 
-db_path = os.environ['DB_PATH']
-DB: Database = fl.database(db_path)
-CREATURES = load_creatures(DB)
-
-# print(CREATURES[0].__ft__())
+load_ft_creatures = load_creatures

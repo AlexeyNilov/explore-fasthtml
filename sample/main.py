@@ -2,7 +2,7 @@ from fasthtml import common as fh
 from typing import List, Any
 import uuid
 import asyncio
-from service.creature import CREATURES
+from service.creature import load_ft_creatures
 from data.logger import set_logging
 
 
@@ -31,7 +31,7 @@ button = "Start"
 
 def sim():
     data = (
-        fh.Div(*CREATURES, cls="col-xs-2", id="oak"),
+        fh.Div(*load_ft_creatures(), cls="col-xs-2", id="oak"),
     )
     return data
 
@@ -100,7 +100,7 @@ async def background_task():
     while True:
         if len(player_queue) > 0:
             await update_players()
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.1)
 
 
 @app.on_event("startup")
