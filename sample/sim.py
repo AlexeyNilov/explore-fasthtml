@@ -3,6 +3,7 @@ from typing import List, Any
 import uuid
 import asyncio
 from service.creature import load_ft_creatures
+from service.event import get_events_from_db
 from data.logger import set_logging
 
 
@@ -31,7 +32,6 @@ app = fh.FastHTML(hdrs=(fh.picolink, flex_grid, htmx_ws, css), debug=True)
 name = "Sim"
 is_started = False
 count = 0
-events = []
 
 
 def sim():
@@ -39,17 +39,11 @@ def sim():
 
 
 def get_events():
-    global count
-    global events
-
+    events = get_events_from_db()
     if not events:
         events.append("Empty")
 
-    if is_started:
-        count += 1
-        events.append(f"New event {count}")
-
-    return fh.Div(*[fh.P(e, id="event") for e in events[::-1]], id="event-list")
+    return fh.Div(*[fh.P(e, id="event_msg") for e in events[::-1]], id="event-list")
 
 
 def event_log():
@@ -85,7 +79,6 @@ def home(session):
                 hx_get="/get_title",
                 hw_swap="afterbegin",
                 style="margin: 6px;",
-                hx_target="event"
             ),
             cls="col-xs-3",
         ),
