@@ -24,7 +24,7 @@ css = fh.Style(
 app = fh.FastHTML(hdrs=(fh.picolink, flex_grid, htmx_ws, css), debug=True)
 
 
-name = "Sim 1.1"
+name = "Sim"
 is_started = False
 
 
@@ -54,13 +54,14 @@ def home(session):
                 hx_trigger="sim_start from:body",
                 hx_get="/get_title",
                 hw_wap="innerHTML",
+                style="margin: 6px;",
             ),
             cls="col-xs-4",
         ),
         fh.Div(
             fh.Button(
                 get_start_button(),
-                hx_put="/start",
+                hx_get="/start",
                 hx_target="#button",
                 hx_swap="innerHTML",
                 style="margin: 6px;",
@@ -119,7 +120,7 @@ async def start_background_tasks():
     asyncio.create_task(background_task())
 
 
-@app.put("/start")
+@app.get("/start")
 async def start():
     global is_started
     is_started = not is_started
