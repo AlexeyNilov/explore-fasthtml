@@ -22,13 +22,13 @@ def home():
             fh.Div(
                 fh.Div(
                     fh.H2("Team Red"),
-                    fh.Div(load_ft_creatures()[0], cls="row center-xs"),
+                    fh.Div(*load_ft_creatures()[:2], cls="row center-xs"),
                     cls="col-xs",
                     id="team_read"
                 ),
                 fh.Div(
                     fh.H2("Team Blue"),
-                    fh.Div(load_ft_creatures()[1], cls="row center-xs"),
+                    fh.Div(*load_ft_creatures()[:2], cls="row center-xs"),
                     cls="col-xs",
                     id="team_blue"
                 ),

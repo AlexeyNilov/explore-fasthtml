@@ -13,7 +13,7 @@ css = fh.Style(
     .box {{ {style} }}
     .col-xs-3 {{ {style} }}
     .col-xs-4 {{ {style} }}
-    .col-xs-5 {{ {style} flex-basis: 50%; }}
+    .col-xs-5 {{ {style} }}
     .col-xs-8 {{ {style} }}
     .col-xs {{ {style} }}
     #event-list p {{ margin: 1px; padding: 1px;}}

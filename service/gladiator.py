@@ -9,9 +9,7 @@ def __ft__(self: Creature):
     return fh.Div(
         f"{self.name}",
         fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
-        fh.Ul(
-            fh.Img(src=f"img/{self.name.lower()}.png", width="100" )
-        ),
+        fh.Img(src=f"img/{self.name.lower()}.png", width="100"),
         cls="box",
     )
 
