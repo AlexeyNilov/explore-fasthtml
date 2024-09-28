@@ -10,13 +10,13 @@ style = "border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px;
 css = fh.Style(
     f"""
     .row {{ {style} }}
-    .box {{ {style} }}
+    .box {{ {style} width: 110px; }}
     .col-xs-3 {{ {style} }}
     .col-xs-4 {{ {style} }}
     .col-xs-5 {{ {style} }}
     .col-xs-8 {{ {style} }}
     .col-xs {{ {style} }}
-    #event-list p {{ margin: 1px; padding: 1px;}}
+    #event_list p {{ margin: 1px; padding: 1px;}}
     progress::-webkit-progress-value {{ background-color: red !important; }}
 """
 )

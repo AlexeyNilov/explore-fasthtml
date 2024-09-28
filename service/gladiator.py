@@ -9,9 +9,23 @@ def __ft__(self: Creature):
     return fh.Div(
         f"{self.name}",
         fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
-        fh.Img(src=f"img/{self.name.lower()}.png", width="100"),
+        fh.Img(src=f"img/{self.name.lower()}.png", width="80"),
         cls="box",
     )
 
 
 load_ft_creatures = load_creatures
+empty_space = fh.Div("Empty", cls="box")
+
+def get_red_team() -> list:
+    team = [empty_space for _ in range(4)]
+    g = load_ft_creatures()[0]
+    team.append(g.__ft__())
+    return team
+
+
+def get_blue_team() -> list:
+    team = [empty_space for _ in range(4)]
+    g = load_ft_creatures()[1]
+    team.insert(0, g.__ft__())
+    return team
