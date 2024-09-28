@@ -17,7 +17,7 @@ app = fh.FastHTML(hdrs=html_headers, debug=True)
 @app.get("/")
 def home():
     return (
-        fh.Title(name),
+        fh.Title(f"{name}: {version}"),
         fh.Main(
             get_header(name),
             fh.Div(
