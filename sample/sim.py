@@ -13,11 +13,13 @@ flex_grid = fh.Link(
     href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css",
 )
 htmx_ws = fh.Script(src="https://unpkg.com/htmx-ext-ws@2.0.0/ws.js")
+style = "{ border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }"
 css = fh.Style(
-    """
-    .row { border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }
-    .box { border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }
-    .col-xs-4 { border: 1px solid black; border-radius: 5px; margin: 2px; padding: 2px; }
+    f"""
+    .row {style}
+    .box {style}
+    .col-xs-3 {style}
+    .col-xs-4 {style}
 """
 )
 
@@ -29,12 +31,13 @@ is_started = False
 
 
 def sim():
-    return (fh.Div(*load_ft_creatures(), cls="col-xs-2", id="oak"))
+    return fh.Div(*load_ft_creatures(), cls="col-xs-4", id="sim-list")
 
 
 @app.get("/get_title")
 def get_title():
-    return f"{name} status: {is_started}"
+    status = "stopped" if is_started else "started"
+    return f"{name}: {status}"
 
 
 def get_start_button():
@@ -56,7 +59,7 @@ def home(session):
                 hw_wap="innerHTML",
                 style="margin: 6px;",
             ),
-            cls="col-xs-4",
+            cls="col-xs-3",
         ),
         fh.Div(
             fh.Button(
