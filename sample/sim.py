@@ -21,6 +21,7 @@ css = fh.Style(
     .col-xs-3 {style}
     .col-xs-4 {style}
     .col-xs {style}
+    #event-list p {{ margin: 1px; padding: 1px;}}
 """
 )
 
@@ -30,7 +31,7 @@ app = fh.FastHTML(hdrs=(fh.picolink, flex_grid, htmx_ws, css), debug=True)
 name = "Sim"
 is_started = False
 count = 0
-events = ["Empty"]
+events = []
 
 
 def sim():
@@ -41,11 +42,14 @@ def get_events():
     global count
     global events
 
+    if not events:
+        events.append("Empty")
+
     if is_started:
         count += 1
         events.append(f"New event {count}")
 
-    return fh.Div(*[fh.P(e) for e in events[::-1]], id="event-list", style="margin: 1px; padding: 1px;")
+    return fh.Div(*[fh.P(e, id="event") for e in events[::-1]], id="event-list")
 
 
 def event_log():
