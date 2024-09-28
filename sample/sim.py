@@ -20,6 +20,7 @@ css = fh.Style(
     .box {style}
     .col-xs-3 {style}
     .col-xs-4 {style}
+    .col-xs {style}
 """
 )
 
@@ -28,10 +29,33 @@ app = fh.FastHTML(hdrs=(fh.picolink, flex_grid, htmx_ws, css), debug=True)
 
 name = "Sim"
 is_started = False
+count = 0
 
 
 def sim():
     return fh.Div(*load_ft_creatures(), cls="col-xs-4", id="sim-list")
+
+
+def event_log():
+    text = f"{name}: {is_started}"
+    return fh.Div(
+        text,
+        cls="col-xs",
+        id="event-list",
+        style="height: 200px; overflow-y: scroll;",
+        hx_get="/get_events",
+        hx_trigger="every 1s",
+        hx_target="#event-list",
+        hx_swap="afterbegin",
+    )
+
+
+@app.get("/get_events")
+def get_events():
+    global count
+    if is_started:
+        count += 1
+        return fh.P(f"New event {count}")
 
 
 @app.get("/get_title")
@@ -56,7 +80,7 @@ def home(session):
                 id="title",
                 hx_trigger="sim_start from:body",
                 hx_get="/get_title",
-                hw_wap="innerHTML",
+                hw_swap="innerHTML",
                 style="margin: 6px;",
             ),
             cls="col-xs-3",
@@ -79,7 +103,7 @@ def home(session):
         fh.Title("Simulation"),
         fh.Main(
             header,
-            fh.Div(sim(), id="gen-list", cls="row"),
+            fh.Div(sim(), event_log(), id="gen-list", cls="row"),
             cls="container",
             hx_ext="ws",
             ws_connect="/main",
