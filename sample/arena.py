@@ -10,7 +10,6 @@ set_logging()
 
 name = "Dungeon Arena"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
-player_queue: List[Any] = []
 
 
 @app.get("/")
@@ -27,20 +26,24 @@ def home():
     )
 
 
-async def update_players():
-    for player in player_queue:
+# WS-related stuff lives bellow
+client_queue: List[Any] = []
+
+
+async def update_clients():
+    for client in client_queue:
         try:
-            await player(get_events())
+            await client(get_events())
         except Exception:
-            player_queue.remove(player)
+            client_queue.remove(client)
 
 
 async def on_connect(send):
-    player_queue.append(send)
+    client_queue.append(send)
 
 
 async def on_disconnect(send):
-    await update_players()
+    await update_clients()
 
 
 @app.ws("/ws", conn=on_connect, disconn=on_disconnect)
@@ -50,8 +53,8 @@ async def ws(msg: str, send):
 
 async def background_task():
     while True:
-        if len(player_queue) > 0:
-            await update_players()
+        if len(client_queue) > 0:
+            await update_clients()
         await asyncio.sleep(0.5)
 
 
