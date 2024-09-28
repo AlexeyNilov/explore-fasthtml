@@ -30,9 +30,7 @@ button = "Start"
 
 
 def sim():
-    data = (
-        fh.Div(*load_ft_creatures(), cls="col-xs-2", id="oak"),
-    )
+    data = (fh.Div(*load_ft_creatures(), cls="col-xs-2", id="oak"),)
     return data
 
 

@@ -52,7 +52,7 @@ def event_log():
         get_events(),
         cls="col-xs",
         id="event-block",
-        style="height: 200px; overflow-y: scroll;"
+        style="height: 200px; overflow-y: scroll;",
     )
 
 
