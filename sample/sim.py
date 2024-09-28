@@ -30,32 +30,31 @@ app = fh.FastHTML(hdrs=(fh.picolink, flex_grid, htmx_ws, css), debug=True)
 name = "Sim"
 is_started = False
 count = 0
+events = ["Empty"]
 
 
 def sim():
     return fh.Div(*load_ft_creatures(), cls="col-xs-4", id="sim-list")
 
 
-def event_log():
-    text = f"{name}: {is_started}"
-    return fh.Div(
-        text,
-        cls="col-xs",
-        id="event-list",
-        style="height: 200px; overflow-y: scroll;",
-        hx_get="/get_events",
-        hx_trigger="every 1s",
-        hx_target="#event-list",
-        hx_swap="afterbegin",
-    )
-
-
-@app.get("/get_events")
 def get_events():
     global count
+    global events
+
     if is_started:
         count += 1
-        return fh.P(f"New event {count}")
+        events.append(f"New event {count}")
+
+    return fh.Div(*[fh.P(e) for e in events[::-1]], id="event-list", style="margin: 1px; padding: 1px;")
+
+
+def event_log():
+    return fh.Div(
+        get_events(),
+        cls="col-xs",
+        id="event-block",
+        style="height: 200px; overflow-y: scroll;"
+    )
 
 
 @app.get("/get_title")
@@ -80,8 +79,9 @@ def home(session):
                 id="title",
                 hx_trigger="sim_start from:body",
                 hx_get="/get_title",
-                hw_swap="innerHTML",
+                hw_swap="afterbegin",
                 style="margin: 6px;",
+                hx_target="event"
             ),
             cls="col-xs-3",
         ),
@@ -106,7 +106,7 @@ def home(session):
             fh.Div(sim(), event_log(), id="gen-list", cls="row"),
             cls="container",
             hx_ext="ws",
-            ws_connect="/main",
+            ws_connect="/ws",
         ),
     )
 
@@ -117,7 +117,7 @@ player_queue: List[Any] = []
 async def update_players():
     for player in player_queue:
         try:
-            await player(sim())
+            await player((sim(), get_events()))
         except Exception:
             player_queue.remove(player)
 
@@ -130,7 +130,7 @@ async def on_disconnect(send):
     await update_players()
 
 
-@app.ws("/main", conn=on_connect, disconn=on_disconnect)
+@app.ws("/ws", conn=on_connect, disconn=on_disconnect)
 async def ws(msg: str, send):
     pass
 
