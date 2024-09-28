@@ -115,7 +115,7 @@ async def background_task():
     while True:
         if len(player_queue) > 0:
             await update_players()
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.5)
 
 
 @app.on_event("startup")
