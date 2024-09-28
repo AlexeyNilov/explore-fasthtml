@@ -14,3 +14,4 @@ https://hypermedia.systems/book/contents/
 https://github.com/AnswerDotAI/fasthtml/blob/main/examples/adv_app.py
 https://github.com/AnswerDotAI/fasthtml-example
 https://docs.fastht.ml/ref/handlers.html#request-and-response-objects
+https://htmx.org/attributes/hx-trigger/
