@@ -18,4 +18,13 @@ css = fh.Style(
     progress::-webkit-progress-value {{ background-color: red !important; }}
 """
 )
-headers = (fh.picolink, flex_grid, htmx_ws, css)
+html_headers = (fh.picolink, flex_grid, htmx_ws, css)
+
+
+def get_header(name: str):
+    return fh.Div(
+        fh.Div(
+            fh.H1(name, id="title", style="margin: 6px;"), cls="col-xs-3"
+        ),
+        cls="row",
+    )

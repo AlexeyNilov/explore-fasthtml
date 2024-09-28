@@ -1,33 +1,24 @@
 from fasthtml import common as fh
 from typing import List, Any
-import uuid
 import asyncio
 from service.event import event_log, get_events
 from data.logger import set_logging
-from service.headers import headers
+from ui.common import html_headers, get_header
 
 
 set_logging()
-app = fh.FastHTML(hdrs=headers, debug=True)
+
+name = "Dungeon Arena"
+app = fh.FastHTML(hdrs=html_headers, debug=True)
 player_queue: List[Any] = []
 
 
 @app.get("/")
-def home(session):
-    if "session_id" not in session:
-        session["session_id"] = str(uuid.uuid4())
-
-    header = fh.Div(
-        fh.Div(
-            fh.H1("Dungeon Arena", id="title", style="margin: 6px;"), cls="col-xs-3"
-        ),
-        cls="row",
-    )
-
+def home():
     return (
-        fh.Title("Dungeon Arena"),
+        fh.Title(name),
         fh.Main(
-            header,
+            get_header(name),
             fh.Div(event_log(), id="main_body", cls="row"),
             cls="container",
             hx_ext="ws",
