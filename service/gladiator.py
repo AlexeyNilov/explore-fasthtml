@@ -1,7 +1,8 @@
 from fasthtml import common as fh
 from dnd_engine.model.creature import Creature
 from fastcore.all import patch
-from dnd_engine.data.storage_fastlite import load_creatures
+# from dnd_engine.data.storage_fastlite import load_creatures
+from dnd_engine.data.bestiary import get_creature
 
 
 @patch
@@ -14,18 +15,19 @@ def __ft__(self: Creature):
     )
 
 
-load_ft_creatures = load_creatures
+# load_ft_creatures = load_creatures
 empty_space = fh.Div("Empty", cls="box")
+
 
 def get_red_team() -> list:
     team = [empty_space for _ in range(4)]
-    g = load_ft_creatures()[0]
+    g = get_creature("Wolf")
     team.append(g.__ft__())
     return team
 
 
 def get_blue_team() -> list:
     team = [empty_space for _ in range(4)]
-    g = load_ft_creatures()[1]
+    g = get_creature("Pig")
     team.insert(0, g.__ft__())
     return team

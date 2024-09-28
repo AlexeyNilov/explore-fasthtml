@@ -50,7 +50,7 @@ def home():
 
 @app.get("/{fname:path}.{ext:static}")
 def static(fname: str, ext: str):
-  return fh.FileResponse(f'{fname}.{ext}')
+    return fh.FileResponse(f'{fname}.{ext}')
 
 
 # WS-related stuff lives bellow
