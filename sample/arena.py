@@ -10,6 +10,7 @@ from service.gladiator import get_red_team, get_blue_team
 set_logging()
 
 name = "Dungeon Arena"
+version = "0.0.10"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
