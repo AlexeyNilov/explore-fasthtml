@@ -4,6 +4,7 @@ import asyncio
 from service.event import event_log, get_events
 from data.logger import set_logging
 from ui.common import html_headers, get_header
+from service.gladiator import load_ft_creatures
 
 
 set_logging()
@@ -18,12 +19,37 @@ def home():
         fh.Title(name),
         fh.Main(
             get_header(name),
-            fh.Div(event_log(), id="main_body", cls="row"),
+            fh.Div(
+                fh.Div(
+                    fh.H2("Team Red"),
+                    fh.Div(load_ft_creatures()[0], cls="row center-xs"),
+                    cls="col-xs",
+                    id="team_read"
+                ),
+                fh.Div(
+                    fh.H2("Team Blue"),
+                    fh.Div(load_ft_creatures()[1], cls="row center-xs"),
+                    cls="col-xs",
+                    id="team_blue"
+                ),
+                id="combat_queue",
+                cls="row center-xs",
+            ),
+            fh.Div(
+                fh.Div("Control Panel", cls="col-xs-8"),
+                event_log(),
+                id="footer",
+                cls="row"),
             cls="container",
             hx_ext="ws",
             ws_connect="/ws",
         ),
     )
+
+
+@app.get("/{fname:path}.{ext:static}")
+def static(fname: str, ext: str):
+  return fh.FileResponse(f'{fname}.{ext}')
 
 
 # WS-related stuff lives bellow

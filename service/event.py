@@ -13,7 +13,7 @@ def get_events_from_db():
 def get_events():
     events = get_events_from_db()
     if not events:
-        events.append("Empty")
+        events.append("Event log")
 
     return fh.Div(*[fh.P(e, id="event_msg") for e in events[::-1]], id="event-list")
 

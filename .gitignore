@@ -12,3 +12,4 @@ conf/settings.py
 db/*
 sample/db/*
 start.sh
+sample/img/*
