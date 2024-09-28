@@ -23,6 +23,7 @@ css = fh.Style(
     .col-xs-4 {style}
     .col-xs {style}
     #event-list p {{ margin: 1px; padding: 1px;}}
+    progress::-webkit-progress-value {{ background-color: red !important; }}
 """
 )
 
@@ -57,7 +58,7 @@ def event_log():
 
 @app.get("/get_title")
 def get_title():
-    status = "stopped" if is_started else "started"
+    status = "started" if is_started else "stopped"
     return f"{name}: {status}"
 
 

@@ -8,6 +8,7 @@ from dnd_engine.data.storage_fastlite import load_creatures
 def __ft__(self: Creature):
     return fh.Div(
         f"{self.id}",
+        fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
         fh.Ul(
             fh.Li("Name: ", self.name),
             fh.Li("Is alive: ", self.is_alive),
