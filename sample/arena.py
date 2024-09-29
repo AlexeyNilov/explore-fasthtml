@@ -4,13 +4,13 @@ import asyncio
 from service.event import event_log, get_events
 from data.logger import set_logging
 from ui.common import html_headers, get_header
-from service.gladiator import get_red_team, get_blue_team
+from ui.battle import get_red_team, get_blue_team
 
 
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.10"
+version = "0.0.15"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -21,18 +21,8 @@ def home():
         fh.Main(
             get_header(name),
             fh.Div(
-                fh.Div(
-                    fh.H2("Team Red"),
-                    fh.Div(*get_red_team(), cls="row center-xs"),
-                    cls="col-xs",
-                    id="team_read"
-                ),
-                fh.Div(
-                    fh.H2("Team Blue"),
-                    fh.Div(*get_blue_team(), cls="row center-xs"),
-                    cls="col-xs",
-                    id="team_blue"
-                ),
+                get_red_team(),
+                get_blue_team(),
                 id="combat_queue",
                 cls="row center-xs",
             ),
