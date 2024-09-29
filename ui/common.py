@@ -14,7 +14,7 @@ css = fh.Style(
     .col-xs-3 {{ {style} }}
     .col-xs-4 {{ {style} }}
     .col-xs-5 {{ {style} }}
-    .col-xs-6 {{ {style} }}
+    .col-xs-8 {{ {style} }}
     .col-xs {{ {style} }}
     #event_list p {{ margin: 1px; padding: 1px;}}
     progress::-webkit-progress-value {{ background-color: red !important; }}

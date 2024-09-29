@@ -11,7 +11,7 @@ from service.combat import get_new_combat, AsyncCombat
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.22"
+version = "0.0.24"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 start_battle: bool = False
@@ -31,7 +31,7 @@ def home():
                 cls="row center-xs",
             ),
             fh.Div(
-                fh.Div("Control Panel", cls="col-xs-6"),
+                fh.Div("Control Panel", cls="col-xs-8"),
                 event_log(),
                 id="footer",
                 cls="row"),
@@ -54,7 +54,7 @@ client_queue: List[Any] = []
 async def update_clients():
     for client in client_queue:
         try:
-            await client(get_events())
+            await client((get_events(), get_red_team(combat), get_blue_team(combat)))
         except Exception:
             client_queue.remove(client)
 
