@@ -87,8 +87,7 @@ async def run_battle():
             if combat.is_completed:
                 combat = get_new_combat()
 
-            combat.form_combat_queue()
-            combat.fight()
+            combat.one_round()
 
             if combat.is_the_end():
                 start_battle = False
