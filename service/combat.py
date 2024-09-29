@@ -8,7 +8,7 @@ from dnd_engine.model.team import Team
 class AsyncCombat(Combat):
     def one_round(self):
         self.form_combat_queue()
-        self.fight()
+        self.next_round()
 
 
 def get_new_combat() -> AsyncCombat:

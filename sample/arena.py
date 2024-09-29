@@ -11,7 +11,7 @@ from service.combat import get_new_combat, AsyncCombat
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.24"
+version = "0.0.25"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 start_battle: bool = False
@@ -91,7 +91,7 @@ async def run_battle():
 
             if combat.is_the_end():
                 start_battle = False
-            # await update_clients()
+
         await asyncio.sleep(1)
 
 
