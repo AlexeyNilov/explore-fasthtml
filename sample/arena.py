@@ -92,7 +92,7 @@ async def run_battle():
             if combat.is_the_end():
                 start_battle = False
 
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
 
 
 @app.on_event("startup")
