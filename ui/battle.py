@@ -2,7 +2,7 @@ from fasthtml import common as fh
 from fastcore.all import patch
 
 from dnd_engine.model.creature import Creature
-from service.combat import red, blue
+from service.combat import AsyncCombat
 
 
 TEAM_SIZE = 5
@@ -21,9 +21,9 @@ def __ft__(self: Creature):
 empty_space = fh.Div("Empty", cls="box")
 
 
-def get_red_team() -> list:
+def get_red_team(combat: AsyncCombat) -> list:
     team = [empty_space for _ in range(TEAM_SIZE)]
-    for i, c in enumerate(red.members):
+    for i, c in enumerate(combat.teams[0].members):
         team[i] = c.__ft__()
 
     return fh.Div(
@@ -34,9 +34,9 @@ def get_red_team() -> list:
     )
 
 
-def get_blue_team() -> list:
+def get_blue_team(combat: AsyncCombat) -> list:
     team = [empty_space for _ in range(TEAM_SIZE)]
-    for i, c in enumerate(blue.members):
+    for i, c in enumerate(combat.teams[1].members):
         team[i] = c.__ft__()
     return fh.Div(
         fh.H2("Team Blue"),
