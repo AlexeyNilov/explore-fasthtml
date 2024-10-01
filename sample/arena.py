@@ -4,18 +4,18 @@ import asyncio
 from service.event import event_log, get_events
 from data.logger import set_logging
 from ui.common import html_headers, get_header
-from ui.battle import get_red_team, get_blue_team
-from service.combat import get_new_combat, AsyncCombat
+from ui.battle import get_team
+# from service.combat import get_new_combat, AsyncCombat
 
 
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.25"
+version = "0.0.27"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 start_battle: bool = False
-combat: AsyncCombat = get_new_combat()
+# combat: AsyncCombat = get_new_combat()
 
 
 @app.get("/")
@@ -25,8 +25,8 @@ def home():
         fh.Main(
             get_header(name),
             fh.Div(
-                get_red_team(combat),
-                get_blue_team(combat),
+                get_team(name="Team Red", id="team_red", reverse=True),
+                get_team(name="Team Blue", id="team_blue"),
                 id="combat_queue",
                 cls="row center-xs",
             ),
@@ -54,7 +54,8 @@ client_queue: List[Any] = []
 async def update_clients():
     for client in client_queue:
         try:
-            await client((get_events(), get_red_team(combat), get_blue_team(combat)))
+            await client((get_events(), get_team(name="Team Red", id="team_red", reverse=True),
+                          get_team(name="Team Blue", id="team_blue")))
         except Exception:
             client_queue.remove(client)
 
@@ -79,26 +80,26 @@ async def background_task():
         await asyncio.sleep(0.5)
 
 
-async def run_battle():
-    global start_battle
-    global combat
-    while True:
-        if start_battle:
-            if combat.is_completed:
-                combat = get_new_combat()
+# async def run_battle():
+#     global start_battle
+    # global combat
+    # while True:
+    #     if start_battle:
+    #         if combat.is_completed:
+    #             combat = get_new_combat()
 
-            combat.one_round()
+    #         combat.one_round()
 
-            if combat.is_the_end():
-                start_battle = False
+    #         if combat.is_the_end():
+    #             start_battle = False
 
-        await asyncio.sleep(0.5)
+    #     await asyncio.sleep(0.5)
 
 
 @app.on_event("startup")
 async def start_background_tasks():
     asyncio.create_task(background_task())
-    asyncio.create_task(run_battle())
+    # asyncio.create_task(run_battle())
 
 
 @app.get("/start")

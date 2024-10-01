@@ -1,46 +1,65 @@
 from fasthtml import common as fh
-from fastcore.all import patch
+from dataclasses import dataclass
 
-from dnd_engine.model.creature import Creature
-from service.combat import AsyncCombat
+from dnd_engine.data.fastlite_db import DB
 
 
 TEAM_SIZE = 5
 
+combats = DB.t.combats
+combats.xtra(owner="Arena")
+Combat = combats.dataclass()
+creatures = DB.t.creatures
 
-@patch
-def __ft__(self: Creature):
-    return fh.Div(
-        f"{self.name}",
-        fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
-        fh.Img(src=f"img/{self.name.lower()}.png", width="80"),
-        cls="box",
-    )
+
+@dataclass
+class Gladiator:
+    id: int
+    name: str
+    hp: int
+    max_hp: int
+    is_alive: int
+
+    def __ft__(self):
+        return fh.Div(
+            f"{self.name}",
+            fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
+            fh.Img(src=f"img/{self.name.lower()}.png", width="80"),
+            cls="box",
+        )
+
+
+def get_combat_queue(name: str):
+    return combats[name].queue
+
+
+def get_creature(id: int) -> Gladiator:
+    return Gladiator(**creatures[id])
 
 
 empty_space = fh.Div("Empty", cls="box")
 
 
-def get_red_team(combat: AsyncCombat) -> list:
+def get_team(name: str, id: str, reverse: bool = False) -> list:
     team = [empty_space for _ in range(TEAM_SIZE)]
-    for i, c in enumerate(combat.teams[0].members):
+    queue = get_combat_queue(name="Arena")
+    q = queue.split(";")
+    creatures = list()
+    for team_id_pair in q:
+        items = team_id_pair.split(":")
+        if items[0] == name:
+            creatures.append(get_creature(items[1]))
+
+    for i, c in enumerate(creatures):
         team[i] = c.__ft__()
 
+    if reverse:
+        t = fh.Div(*team[::-1], cls="row center-xs")
+    else:
+        t = fh.Div(*team, cls="row center-xs")
     return fh.Div(
-        fh.H2("Team Red"),
-        fh.Div(*team[::-1], cls="row center-xs"),
+        fh.H2(name),
+        t,
         cls="col-xs",
-        id="team_read"
-    )
-
-
-def get_blue_team(combat: AsyncCombat) -> list:
-    team = [empty_space for _ in range(TEAM_SIZE)]
-    for i, c in enumerate(combat.teams[1].members):
-        team[i] = c.__ft__()
-    return fh.Div(
-        fh.H2("Team Blue"),
-        fh.Div(*team, cls="row center-xs"),
-        cls="col-xs",
-        id="team_blue"
+        id=id
     )

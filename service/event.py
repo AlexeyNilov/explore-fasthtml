@@ -1,6 +1,6 @@
 from typing import List
 from fasthtml import common as fh
-from dnd_engine.data.storage_fastlite import load_events
+from dnd_engine.data.fastlite_loader import load_events
 from dnd_engine.model.event import get_deque
 
 EVENTS = list()
