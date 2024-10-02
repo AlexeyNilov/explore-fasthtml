@@ -32,6 +32,7 @@ def get_header(name: str):
             fh.Button(
                 "Start",
                 hx_get="/start",
+                hx_swap="none",
                 style="margin: 6px;",
                 id="button_start",
             )
@@ -40,6 +41,7 @@ def get_header(name: str):
             fh.Button(
                 "Next",
                 hx_get="/next",
+                hx_swap="none",
                 style="margin: 6px;",
                 id="button_next",
             )

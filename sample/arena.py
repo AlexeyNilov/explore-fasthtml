@@ -11,7 +11,7 @@ from service.combat import start_new_combat, start_next_round
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.37"
+version = "0.0.45"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -94,7 +94,6 @@ async def start():
 async def next_round():
     start_next_round()
     await update_clients()
-    return "Next"
 
 
 fh.serve()
