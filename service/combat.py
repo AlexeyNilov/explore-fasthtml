@@ -1,28 +1,74 @@
-import random
-from dnd_engine.data.bestiary import get_creature
-from dnd_engine.model.combat import Combat
-from dnd_engine.model.event import publish_deque
-from dnd_engine.model.team import Team
+from dataclasses import dataclass
+
+from dnd_engine.data.fastlite_db import DB
+from dnd_engine.data.fastlite_loader import save_event
+from dnd_engine.model.event import Event
 
 
-class AsyncCombat(Combat):
-    def one_round(self):
-        self.form_combat_queue()
-        self.next_round()
+TEAM_SIZE = 5
+
+combats = DB.t.combats
+combats.xtra(owner="Arena")
+Combat = combats.dataclass()
+creatures = DB.t.creatures
 
 
-def get_new_combat() -> AsyncCombat:
-    # Team Red
-    wolfs = [get_creature("Wolf") for _ in range(random.randint(1, 3))]
-    red = Team(name="Red", members=wolfs, events_publisher=publish_deque)
+@dataclass
+class Gladiator:
+    id: int
+    name: str
+    hp: int
+    max_hp: int
+    is_alive: int
 
-    # Team Blue
-    pigs = [get_creature("Pig") for _ in range(random.randint(2, 5))]
-    blue = Team(name="Blue", members=pigs, events_publisher=publish_deque)
-    return AsyncCombat(name="Arena", events_publisher=publish_deque, teams=[red, blue])
 
-# print_deque()
+combat_counter = 0
 
-# print(wolf.model_dump(include={"name", "is_alive", "hp", "skills"}))
-# for pig in pigs:
-#     print(pig.model_dump(include={"name", "is_alive", "hp", "skills"}))
+
+def get_combat_name():
+    return f"Arena_{combat_counter}"
+
+
+def get_combat_queue():
+    return combats[get_combat_name()].queue
+
+
+def get_creature(id: int) -> Gladiator:
+    return Gladiator(**creatures[id])
+
+
+def get_team_creatures(name: str):
+    try:
+        queue = get_combat_queue()
+    except Exception:
+        return []
+
+    q = queue.split(";")
+    creatures = list()
+    for team_id_pair in q:
+        items = team_id_pair.split(":")
+        if items[0] == name:
+            creatures.append(get_creature(items[1]))
+    return creatures
+
+
+def delete_combats(owner: str = "Arena"):
+    sql = f"SELECT name FROM combats WHERE owner = '{owner}';"
+    data = DB.q(sql)
+    for item in data:
+        combats.delete(item["name"])
+
+
+def start_new_combat():
+    delete_combats()
+    global combat_counter
+    combat_counter += 1
+    c = combats.insert(Combat(
+        name=get_combat_name(),
+        owner="Arena",
+        status="Not started",
+        round=0,
+        queue=""
+    ))
+    save_event(Event(source="Arena", msg=f"Combat created: {c}"))
+    print("combat saved")

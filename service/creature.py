@@ -1,7 +1,7 @@
 from fasthtml import common as fh
 from dnd_engine.model.creature import Creature
 from fastcore.all import patch
-from dnd_engine.data.storage_fastlite import load_creatures
+from dnd_engine.data.fastlite_loader import load_creatures
 
 
 @patch
