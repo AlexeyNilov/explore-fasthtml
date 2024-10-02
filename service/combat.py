@@ -72,3 +72,10 @@ def start_new_combat():
     ))
     save_event(Event(source="Arena", msg=f"Combat created: {c}"))
     print("combat saved")
+
+
+def start_next_round():
+    c = combats[get_combat_name()]
+    c.round += 1
+    combats.upsert(c)
+    save_event(Event(source="Arena", msg=f"Round {c.round} started"))

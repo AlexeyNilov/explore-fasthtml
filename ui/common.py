@@ -26,16 +26,23 @@ html_headers = (fh.picolink, flex_grid, htmx_ws, css)
 def get_header(name: str):
     return fh.Div(
         fh.Div(
-            fh.H1(name, id="title", style="margin: 6px;"), cls="col-xs-3"
+            fh.H1(name, id="title", style="margin: 6px;")
         ),
         fh.Div(
             fh.Button(
                 "Start",
                 hx_get="/start",
                 style="margin: 6px;",
-                id="button",
-            ),
-            cls="col-xs-2",
+                id="button_start",
+            )
+        ),
+        fh.Div(
+            fh.Button(
+                "Next",
+                hx_get="/next",
+                style="margin: 6px;",
+                id="button_next",
+            )
         ),
         cls="row",
     )

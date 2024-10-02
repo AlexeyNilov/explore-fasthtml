@@ -5,13 +5,13 @@ from service.event import delete_events, get_events
 from data.logger import set_logging
 from ui.common import html_headers, get_header
 from ui.combat import team, event_log
-from service.combat import start_new_combat
+from service.combat import start_new_combat, start_next_round
 
 
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.36"
+version = "0.0.37"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -28,7 +28,7 @@ def home():
                 cls="row center-xs",
             ),
             fh.Div(
-                fh.Div("Control Panel", cls="col-xs-8"),
+                fh.Div("Control Panel", cls="col-xs-7"),
                 event_log(),
                 id="footer",
                 cls="row"),
@@ -88,6 +88,13 @@ async def start():
     start_new_combat()
     await update_clients()
     return "Start"
+
+
+@app.get("/next")
+async def next_round():
+    start_next_round()
+    await update_clients()
+    return "Next"
 
 
 fh.serve()
