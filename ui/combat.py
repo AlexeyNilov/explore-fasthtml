@@ -17,7 +17,7 @@ def __ft__(self: Gladiator):
 empty_space = fh.Div("Empty", cls="box")
 
 
-def get_team(name: str, id: str, reverse: bool = False) -> list:
+def team(name: str, id: str, reverse: bool = False) -> list:
     team = [empty_space for _ in range(TEAM_SIZE)]
 
     for i, c in enumerate(get_team_creatures(name)):

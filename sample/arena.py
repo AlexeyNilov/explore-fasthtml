@@ -4,7 +4,7 @@ import asyncio
 from service.event import delete_events, get_events
 from data.logger import set_logging
 from ui.common import html_headers, get_header
-from ui.combat import get_team, event_log
+from ui.combat import team, event_log
 from service.combat import start_new_combat
 
 
@@ -22,8 +22,8 @@ def home():
         fh.Main(
             get_header(name),
             fh.Div(
-                get_team(name="Team Red", id="team_red", reverse=True),
-                get_team(name="Team Blue", id="team_blue"),
+                team(name="Team Red", id="team_red", reverse=True),
+                team(name="Team Blue", id="team_blue"),
                 id="combat_queue",
                 cls="row center-xs",
             ),
@@ -51,8 +51,8 @@ client_queue: List[Any] = []
 async def update_clients():
     for client in client_queue:
         try:
-            await client((get_events(), get_team(name="Team Red", id="team_red", reverse=True),
-                          get_team(name="Team Blue", id="team_blue")))
+            await client((get_events(), team(name="Team Red", id="team_red", reverse=True),
+                          team(name="Team Blue", id="team_blue")))
         except Exception:
             client_queue.remove(client)
 
