@@ -21,4 +21,4 @@ def get_events():
     if not events:
         events.append("Event log")
 
-    return fh.Div(*[fh.P(e, id="event_msg") for e in events], id="event_list")
+    return fh.Div(*[fh.P(e, id="event_msg") for e in events[::-1]], id="event_list")

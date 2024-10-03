@@ -11,6 +11,7 @@ css = fh.Style(
     f"""
     .row {{ {style} }}
     .box {{ {style} width: 110px; }}
+    .active_box {{ border: 3px solid green; border-radius: 5px; margin: 2px; padding: 2px; width: 110px; }}
     .col-xs-3 {{ {style} }}
     .col-xs-4 {{ {style} }}
     .col-xs-5 {{ {style} }}

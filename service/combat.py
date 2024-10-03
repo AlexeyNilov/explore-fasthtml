@@ -20,6 +20,7 @@ class Gladiator:
     hp: int
     max_hp: int
     is_alive: int
+    turn: int = 0
 
 
 combat_counter = 0
@@ -37,7 +38,7 @@ def get_creature(id: int) -> Gladiator:
     return Gladiator(**creatures[id])
 
 
-def get_team_creatures(name: str):
+def get_team_creatures(name: str) -> list:
     try:
         queue = get_combat_queue()
     except Exception:
@@ -48,7 +49,9 @@ def get_team_creatures(name: str):
     for team_id_pair in q:
         items = team_id_pair.split(":")
         if items[0] == name:
-            creatures.append(get_creature(items[1]))
+            gladiator = get_creature(items[1])
+            gladiator.turn = items[2]
+            creatures.append(gladiator)
     return creatures
 
 
@@ -71,7 +74,6 @@ def start_new_combat():
         queue=""
     ))
     save_event(Event(source="Arena", msg=f"Combat created: {c}"))
-    print("combat saved")
 
 
 def start_next_round():
