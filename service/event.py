@@ -1,9 +1,10 @@
 from typing import List
-from fasthtml import common as fh
+
 from dnd_engine.data.fastlite_loader import load_events
+from fasthtml import common as fh
 
 
-def get_events_from_db():
+def get_events_from_db() -> List[str]:
     events: List[str] = []
     for e in load_events():
         events.append(f'{e["source"]}: {e["msg"]}')

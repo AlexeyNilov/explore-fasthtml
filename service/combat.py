@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from typing import List
 
-from dnd_engine.data.fastlite_db import DB
-from dnd_engine.data.fastlite_loader import save_event, save_action
-from dnd_engine.model.event import Event
 from dnd_engine.data.fastlite_dataclasses import Combats
+from dnd_engine.data.fastlite_db import DB
+from dnd_engine.data.fastlite_loader import save_action
+from dnd_engine.data.fastlite_loader import save_event
+from dnd_engine.model.event import Event
 
 
 TEAM_SIZE = 5
@@ -64,11 +65,11 @@ def get_gladiators_from_queue(queue: str, team_name: str) -> List[Gladiator]:
         items = team_id_pair.split(":")
         if items[0] == team_name:
             try:
-                gladiator = get_creature(items[1])
+                gladiator = get_creature(int(items[1]))
             except CreatureNotFound:
                 continue
 
-            gladiator.turn = items[2]
+            gladiator.turn = int(items[2])
 
             action = {"attacker_id": gladiator.id, "skill_classes": "Attack"}
             save_action(action)
@@ -92,11 +93,13 @@ def get_team_creatures(name: str) -> list:
 def start_new_combat():
     global combat_counter
     combat_counter += 1
-    c = combats.insert(Combats(
-        name=get_combat_name(),
-        owner="Arena",
-        status="Not started",
-        round=0,
-        queue=""
-    ))
+    c = combats.insert(
+        Combats(
+            name=get_combat_name(),
+            owner="Arena",
+            status="Not started",
+            round=0,
+            queue="",
+        )
+    )
     save_event(Event(source="Arena", msg=f"Combat created: {c}"))
