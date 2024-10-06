@@ -2,10 +2,10 @@ import asyncio
 from typing import Any
 from typing import List
 
-from dnd_engine.data.fastlite_loader import save_action
 from fasthtml import common as fh
 
 from data.logger import set_logging
+from service.combat import save_skill_usage
 from service.combat import start_new_combat
 from service.event import get_events
 from ui.combat import control
@@ -18,7 +18,7 @@ from ui.common import html_headers
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.78"
+version = "0.0.79"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -104,9 +104,9 @@ async def start():
 
 
 @app.get("/use_skill")
-def use_skill(name: str, creature_id: int):
-    action = {"attacker_id": creature_id, "skill_classes": "Attack"}
-    save_action(action)
+async def use_skill(name: str, creature_id: int):
+    save_skill_usage(name=name, creature_id=creature_id)
+    await update_clients()
 
 
 fh.serve()

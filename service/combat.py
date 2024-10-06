@@ -4,6 +4,7 @@ from typing import List
 from dnd_engine.data.fastlite_dataclasses import Combats
 from dnd_engine.data.fastlite_db import DB
 from dnd_engine.data.fastlite_loader import load_creature
+from dnd_engine.data.fastlite_loader import save_action
 from dnd_engine.data.fastlite_loader import save_event
 from dnd_engine.model.event import Event
 
@@ -112,3 +113,12 @@ def get_active_gladiator() -> Gladiator:
 def get_skill_names(creature_id: int) -> List[str]:
     cr = load_creature(creature_id)
     return list(cr.skills.keys())
+
+
+def save_skill_usage(name: str, creature_id: int):
+    cr = load_creature(creature_id)
+    action = {
+        "attacker_id": creature_id,
+        "skill_classes": cr.skills[name].__class__.__name__,
+    }
+    save_action(action)
