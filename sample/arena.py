@@ -11,7 +11,7 @@ from service.combat import start_new_combat
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.60"
+version = "0.0.62"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 

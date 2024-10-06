@@ -2,15 +2,16 @@ from dataclasses import dataclass
 from typing import List
 
 from dnd_engine.data.fastlite_db import DB
-from dnd_engine.data.fastlite_loader import save_event
+from dnd_engine.data.fastlite_loader import save_event, save_action
 from dnd_engine.model.event import Event
+from dnd_engine.data.fastlite_dataclasses import Combats
 
 
 TEAM_SIZE = 5
 
 combats = DB.t.combats
 combats.xtra(owner="Arena")
-Combat = combats.dataclass()
+combats.dataclass()
 creatures = DB.t.creatures
 actions = DB.t.actions
 
@@ -68,11 +69,11 @@ def get_gladiators_from_queue(queue: str, team_name: str) -> List[Gladiator]:
                 continue
 
             gladiator.turn = items[2]
-            # if gladiator.id == action["attacker_id"]:
-            #     gladiator.is_attacker = True
-            # if gladiator.id == action["target_id"]:
-            #     gladiator.is_target = True
-            # print(gladiator)
+
+            action = {"attacker_id": gladiator.id, "skill_classes": "Attack"}
+            save_action(action)
+            gladiator.is_attacker = True
+
             gladiators.append(gladiator)
     return gladiators
 
@@ -91,7 +92,7 @@ def get_team_creatures(name: str) -> list:
 def start_new_combat():
     global combat_counter
     combat_counter += 1
-    c = combats.insert(Combat(
+    c = combats.insert(Combats(
         name=get_combat_name(),
         owner="Arena",
         status="Not started",
