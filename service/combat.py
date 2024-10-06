@@ -116,9 +116,8 @@ def get_skill_names(creature_id: int) -> List[str]:
 
 
 def save_skill_usage(name: str, creature_id: int):
-    cr = load_creature(creature_id)
     action = {
         "attacker_id": creature_id,
-        "skill_classes": cr.skills[name].__class__.__name__,
+        "skill_names": name,
     }
     save_action(action)

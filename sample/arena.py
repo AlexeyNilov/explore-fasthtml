@@ -18,7 +18,7 @@ from ui.common import html_headers
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.79"
+version = "0.0.80"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
