@@ -1,20 +1,23 @@
-from fasthtml import common as fh
 from fastcore.all import patch
-from service.combat import TEAM_SIZE, Gladiator, get_team_creatures
+from fasthtml import common as fh
+
+from service.combat import get_team_creatures
+from service.combat import Gladiator
+from service.combat import TEAM_SIZE
 from service.event import get_events
 
 
 @patch
 def __ft__(self: Gladiator):
-    # if self.is_active:
-    #     box_type = "active_box"
-    # else:
-    #     box_type = "box"
+    if self.is_active:
+        box_type = "active_box"
+    else:
+        box_type = "box"
     return fh.Div(
-        f"{self.name} {self.turn} {self.is_attacker}",
+        f"{self.name}_{self.id} {self.turn}",
         fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
         fh.Img(src=f"img/{self.name.lower()}.png", width="80"),
-        cls="box",
+        cls=f"{box_type}",
     )
 
 
@@ -31,12 +34,7 @@ def team(name: str, id: str, reverse: bool = False) -> list:
         t = fh.Div(*team[::-1], cls="row center-xs")
     else:
         t = fh.Div(*team, cls="row center-xs")
-    return fh.Div(
-        fh.H2(name),
-        t,
-        cls="col-xs",
-        id=id
-    )
+    return fh.Div(fh.H2(name), t, cls="col-xs", id=id)
 
 
 def event_log():

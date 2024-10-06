@@ -33,8 +33,7 @@ class Gladiator:
     max_hp: int
     is_alive: int
     turn: int = 0
-    is_attacker: bool = False
-    is_target: bool = False
+    is_active: int = 0
 
 
 combat_counter = 0
@@ -73,7 +72,6 @@ def get_gladiators_from_queue(queue: str, team_name: str) -> List[Gladiator]:
 
             action = {"attacker_id": gladiator.id, "skill_classes": "Attack"}
             save_action(action)
-            gladiator.is_attacker = True
 
             gladiators.append(gladiator)
     return gladiators
