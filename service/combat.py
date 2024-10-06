@@ -4,7 +4,6 @@ from typing import List
 from dnd_engine.data.fastlite_dataclasses import Combats
 from dnd_engine.data.fastlite_db import DB
 from dnd_engine.data.fastlite_loader import load_creature
-from dnd_engine.data.fastlite_loader import save_action
 from dnd_engine.data.fastlite_loader import save_event
 from dnd_engine.model.event import Event
 
@@ -70,10 +69,6 @@ def get_gladiators_from_queue(queue: str, team_name: str) -> List[Gladiator]:
                 continue
 
             gladiator.turn = int(items[2])
-
-            action = {"attacker_id": gladiator.id, "skill_classes": "Attack"}
-            save_action(action)
-
             gladiators.append(gladiator)
     return gladiators
 
@@ -114,7 +109,6 @@ def get_active_gladiator() -> Gladiator:
         raise CreatureNotFound
 
 
-def get_skill_names() -> List[str]:
-    g = get_active_gladiator()
-    cr = load_creature(g.id)
+def get_skill_names(creature_id: int) -> List[str]:
+    cr = load_creature(creature_id)
     return list(cr.skills.keys())

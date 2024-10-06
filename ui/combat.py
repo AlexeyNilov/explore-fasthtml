@@ -52,24 +52,35 @@ def event_log():
 def creature_info():
     info = None
     try:
-        info = get_active_gladiator()
+        g = get_active_gladiator()
+        info = fh.P(f"{g.name}_{g.id} HP: {g.hp} Max_HP: {g.max_hp}")
     except CreatureNotFound:
         pass
-    return fh.Div("Info block", info, cls="col-xs", id="info_block")
+    return fh.Div(info, cls="col-xs", id="info_block")
 
 
 def skill_buttons():
     skill_names = []
     try:
-        skill_names = get_skill_names()
+        g = get_active_gladiator()
+        skill_names = get_skill_names(g.id)
     except CreatureNotFound:
         pass
 
     buttons = list()
     for skill_name in skill_names:
-        buttons.append(skill_name)
+        buttons.append(
+            fh.Button(
+                skill_name,
+                hx_get=f"/use_skill?name={skill_name}&creature_id={g.id}",
+                hx_swap="none",
+                style="margin: 2px; background-color: green; padding: 4px;",
+                id=f"button_skill_{skill_name}",
+                cls="skill_button",
+            )
+        )
 
-    return fh.Div("Control buttons", buttons, cls="col-xs", id="skill_buttons_block")
+    return fh.Div(*buttons, cls="col-xs-6", id="skill_buttons_block")
 
 
 def control():
