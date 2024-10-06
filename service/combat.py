@@ -3,6 +3,7 @@ from typing import List
 
 from dnd_engine.data.fastlite_dataclasses import Combats
 from dnd_engine.data.fastlite_db import DB
+from dnd_engine.data.fastlite_loader import load_creature
 from dnd_engine.data.fastlite_loader import save_action
 from dnd_engine.data.fastlite_loader import save_event
 from dnd_engine.model.event import Event
@@ -101,3 +102,19 @@ def start_new_combat():
         )
     )
     save_event(Event(source="Arena", msg=f"Combat created: {c}"))
+
+
+def get_active_gladiator() -> Gladiator:
+    sql = "SELECT id FROM creatures WHERE is_active = 1;"
+    data = DB.q(sql)
+    if data:
+        creature_id = data[0]["id"]
+        return get_creature(creature_id)
+    else:
+        raise CreatureNotFound
+
+
+def get_skill_names() -> List[str]:
+    g = get_active_gladiator()
+    cr = load_creature(g.id)
+    return list(cr.skills.keys())

@@ -7,6 +7,7 @@ from fasthtml import common as fh
 from data.logger import set_logging
 from service.combat import start_new_combat
 from service.event import get_events
+from ui.combat import control
 from ui.combat import event_log
 from ui.combat import team
 from ui.common import get_header
@@ -16,7 +17,7 @@ from ui.common import html_headers
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.66"
+version = "0.0.71"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -33,7 +34,7 @@ def home():
                 cls="row center-xs",
             ),
             fh.Div(
-                fh.Div("Control Panel", cls="col-xs-7"),
+                fh.Div("Control Panel", control(), cls="col-xs-7", id="control_panel"),
                 event_log(),
                 id="footer",
                 cls="row",
@@ -62,6 +63,7 @@ async def update_clients():
                     get_events(),
                     team(name="Team Red", id="team_red", reverse=True),
                     team(name="Team Blue", id="team_blue"),
+                    control(),
                 )
             )
         except Exception:
