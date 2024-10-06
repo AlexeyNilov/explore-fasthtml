@@ -11,7 +11,7 @@ def __ft__(self: Gladiator):
     # else:
     #     box_type = "box"
     return fh.Div(
-        f"{self.name} {self.turn}",
+        f"{self.name} {self.turn} {self.is_attacker}",
         fh.Progress(value=f"{self.hp}", max=f"{self.max_hp}"),
         fh.Img(src=f"img/{self.name.lower()}.png", width="80"),
         cls="box",

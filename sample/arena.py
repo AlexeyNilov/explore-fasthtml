@@ -1,17 +1,17 @@
 from fasthtml import common as fh
 from typing import List, Any
 import asyncio
-from service.event import delete_events, get_events
+from service.event import get_events
 from data.logger import set_logging
 from ui.common import html_headers, get_header
 from ui.combat import team, event_log
-from service.combat import start_new_combat, start_next_round
+from service.combat import start_new_combat
 
 
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.51"
+version = "0.0.60"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -84,7 +84,6 @@ async def start_background_tasks():
 
 @app.get("/start")
 async def start():
-    delete_events()
     start_new_combat()
     await update_clients()
     return "Start"
@@ -92,7 +91,6 @@ async def start():
 
 @app.get("/next")
 async def next_round():
-    start_next_round()
     await update_clients()
 
 

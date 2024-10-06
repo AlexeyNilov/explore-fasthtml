@@ -1,12 +1,6 @@
 from typing import List
 from fasthtml import common as fh
 from dnd_engine.data.fastlite_loader import load_events
-from dnd_engine.data.fastlite_db import DB, create_events_table
-
-
-def delete_events():
-    DB.t.events.drop()
-    create_events_table()
 
 
 def get_events_from_db():
