@@ -16,7 +16,7 @@ from ui.common import html_headers
 set_logging()
 
 name = "Dungeon Arena"
-version = "0.0.63"
+version = "0.0.64"
 app = fh.FastHTML(hdrs=html_headers, debug=True)
 
 
@@ -98,11 +98,6 @@ async def start():
     start_new_combat()
     await update_clients()
     return "Start"
-
-
-@app.get("/next")
-async def next_round():
-    await update_clients()
 
 
 fh.serve()
